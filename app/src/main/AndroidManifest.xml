@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:name=".TrainingPlanApp"
         android:theme="@style/Theme.TrainingPlanApp"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
             android:name=".MainActivity"

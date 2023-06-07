@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">TrainingPlanApp</string>
+    <string name="empty_validation_error">Text fields must be filled!</string>
+    <string name="email_validation_error">"Email is invalid. Please check it for typos and ensure it meets the format 'name@example.com'."</string>
+    <string name="no_connection_error">Could not reach server. Check your internet connection</string>
+    <string name="unexpected_error">"An unexpected error occurred"</string>
+    <string name="email_incorrect">Email not valid</string>
+    <string name="empty_validation">Text fields must not be empty</string>
+    <string name="password_validation">Password is invalid. It must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and a number or special character.</string>
+    <string name="password_must_match">Passwords must match</string>
+    <string name="login_validation_error">Login is invalid. It should only contain lowercase letters, numbers, underscores or hyphens and be between 3 and 16 characters long.</string>
 </resources>
