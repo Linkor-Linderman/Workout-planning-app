@@ -64,7 +64,6 @@ class AuthRepositoryImpl(
                     sharedPreferences.setString(Constants.ACCESS_TOKEN, tokenDto.accessToken)
                     sharedPreferences.setString(Constants.REFRESH_TOKEN, tokenDto.restoreToken)
                     emit(Resource.Success(Unit))
-
                 }
             } catch (e: HttpException) {
                 emit(

@@ -23,7 +23,7 @@ import com.example.trainingplanapp.featureAuthorization.presentation.common.Fill
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-@Destination(start = true)
+@Destination(start=true)
 @Composable
 fun LoginScreen(
     navController: DestinationsNavigator,
@@ -89,18 +89,15 @@ fun LoginScreen(
                     .weight(1f),
                 contentAlignment = Center
             ) {
-                val some = remember {
-                    mutableStateOf("")
-                }
                 Column(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     AuthorizationTextField(
                         modifier = Modifier.fillMaxWidth(),
                         value = state.email,
-                        placeholder = "Email",
-                        label = "Email",
-                        keyboardType = KeyboardType.Email,
+                        placeholder = "Login",
+                        label = "Login",
+                        keyboardType = KeyboardType.Text,
                         onValueChange = { viewModel.onEvent(LoginScreenUiEvents.ChangeEmailValue(it)) }
                     )
                     Spacer(modifier = Modifier.height(16.dp))

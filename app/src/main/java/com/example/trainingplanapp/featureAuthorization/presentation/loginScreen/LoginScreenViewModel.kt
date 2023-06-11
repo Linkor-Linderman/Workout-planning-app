@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trainingplanapp.R
 import com.example.trainingplanapp.common.Resource
+import com.example.trainingplanapp.destinations.MainScreenViewDestination
+import com.example.trainingplanapp.destinations.RegistrationScreenDestination
 import com.example.trainingplanapp.di.utill.StringResourcesManager
 import com.example.trainingplanapp.featureAuthorization.domain.model.UserCredentials
 import com.example.trainingplanapp.featureAuthorization.domain.useCases.AuthUseCases
-import com.example.trainingplanapp.featureAuthorization.presentation.destinations.RegistrationScreenDestination
-//import com.example.trainingplanapp.featureAuthorization.presentation.loginScreen.destinations.LoginScreenDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -85,10 +85,12 @@ class LoginScreenViewModel @Inject constructor(
                                         errorMessage = "",
                                     )
                                 }
+                                postSideEffect(
+                                    LoginScreenSideEffects.Navigate(MainScreenViewDestination)
+                                )
                             }
                         }
                     }.launchIn(viewModelScope)
-
             }
         }
     }

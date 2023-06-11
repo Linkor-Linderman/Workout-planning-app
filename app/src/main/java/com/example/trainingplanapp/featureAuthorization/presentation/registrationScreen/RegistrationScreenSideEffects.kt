@@ -1,6 +1,6 @@
 package com.example.trainingplanapp.featureAuthorization.presentation.registrationScreen
 
-import com.example.trainingplanapp.featureAuthorization.presentation.destinations.DirectionDestination
+import com.example.trainingplanapp.destinations.DirectionDestination
 
 
 sealed class RegistrationScreenSideEffects {
