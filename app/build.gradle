@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'com.google.devtools.ksp' version '1.6.10-1.0.2'
+    id("kotlin-parcelize")
 }
 
 android {
@@ -125,4 +126,5 @@ dependencies {
     //Compose destination
     implementation 'io.github.raamcosta.compose-destinations:core:1.5.1-beta'
     ksp 'io.github.raamcosta.compose-destinations:ksp:1.5.1-beta'
+
 }

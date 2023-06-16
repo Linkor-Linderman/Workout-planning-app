@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.trainingplanapp.featureGroup.presentation.groupScreen.GroupScreen
 import com.example.trainingplanapp.featureMainScreen.presentation.mainScreen.MainScreen
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
@@ -30,7 +31,7 @@ fun BottomNavigationGraph(
             MainScreen(destinationNavController)
         }
         composable(BottomNavItem.Groups.screen_route) {
-            MainScreen(destinationNavController)
+            GroupScreen(destinationNavController)
         }
     }
 }

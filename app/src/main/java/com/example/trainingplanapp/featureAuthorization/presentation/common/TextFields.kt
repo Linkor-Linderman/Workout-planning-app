@@ -44,7 +44,7 @@ fun AuthorizationTextField(
                 fontSize = 14.sp
             )
         },
-        textStyle = MaterialTheme.typography.body2.copy(color = Color.White),
+        textStyle = MaterialTheme.typography.body2.copy(color = MaterialTheme.colors.primary),
         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
         visualTransformation = visualTransformation
     )

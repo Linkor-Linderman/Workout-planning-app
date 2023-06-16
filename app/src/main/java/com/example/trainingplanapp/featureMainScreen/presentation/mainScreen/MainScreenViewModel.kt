@@ -43,7 +43,7 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    fun fetchCurrentDate() {
+    private fun fetchCurrentDate() {
         intent {
             reduce {
                 state.copy(currentDate = useCase.getCurrentDateUseCase())
@@ -51,7 +51,7 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    fun fetchUserName() {
+    private fun fetchUserName() {
         intent {
             useCase.getProfileUseCase().onEach { result ->
                 when (result) {
