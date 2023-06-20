@@ -25,6 +25,7 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun GroupScreen(
     destinationNavController: DestinationsNavigator,
     viewModel: GroupScreenViewModel = hiltViewModel(),
+    contentPaddingValues: PaddingValues
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
     LaunchedEffect(viewModel) {
@@ -70,6 +71,7 @@ fun GroupScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(contentPaddingValues)
                 .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

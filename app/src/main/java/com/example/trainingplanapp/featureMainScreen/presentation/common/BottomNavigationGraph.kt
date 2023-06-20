@@ -1,5 +1,6 @@
 package com.example.trainingplanapp.featureMainScreen.presentation.common
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -11,6 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.trainingplanapp.featureExercises.presentation.allExercisesScreen.AllExercisesScreen
 import com.example.trainingplanapp.featureGroup.presentation.groupScreen.GroupScreen
 import com.example.trainingplanapp.featureMainScreen.presentation.mainScreen.MainScreen
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -19,19 +21,32 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 fun BottomNavigationGraph(
     navController: NavHostController,
     destinationNavController: DestinationsNavigator,
+    paddingValues: PaddingValues
 ) {
     NavHost(navController, startDestination = BottomNavItem.Home.screen_route) {
         composable(BottomNavItem.Home.screen_route) {
-            MainScreen(destinationNavController)
+            MainScreen(
+                destinationNavController,
+                contentPaddingValues = paddingValues
+            )
         }
         composable(BottomNavItem.Trainings.screen_route) {
-            MainScreen(destinationNavController)
+            MainScreen(
+                destinationNavController,
+                contentPaddingValues = paddingValues
+            )
         }
         composable(BottomNavItem.Exercises.screen_route) {
-            MainScreen(destinationNavController)
+            AllExercisesScreen(
+                destinationNavController,
+                contentPaddingValues = paddingValues
+            )
         }
         composable(BottomNavItem.Groups.screen_route) {
-            GroupScreen(destinationNavController)
+            GroupScreen(
+                destinationNavController,
+                contentPaddingValues = paddingValues
+            )
         }
     }
 }

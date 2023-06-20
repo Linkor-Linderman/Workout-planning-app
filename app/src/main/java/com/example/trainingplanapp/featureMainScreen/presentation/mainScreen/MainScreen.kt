@@ -29,7 +29,8 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 @Composable
 fun MainScreen(
     destinationNavController: DestinationsNavigator,
-    viewModel: MainScreenViewModel = hiltViewModel()
+    viewModel: MainScreenViewModel = hiltViewModel(),
+    contentPaddingValues: PaddingValues
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
     LaunchedEffect(viewModel) {
@@ -71,6 +72,7 @@ fun MainScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
+                .padding(contentPaddingValues)
                 .padding(horizontal = 16.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))

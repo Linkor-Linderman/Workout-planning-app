@@ -15,10 +15,10 @@ fun MainScreenView(
     Scaffold(
         bottomBar = { BottomNavigationBar(navController = navController) }
     ) {
-        it
         BottomNavigationGraph(
             navController = navController,
-            destinationNavController = destinationNavController
+            destinationNavController = destinationNavController,
+            paddingValues = it
         )
     }
 }
