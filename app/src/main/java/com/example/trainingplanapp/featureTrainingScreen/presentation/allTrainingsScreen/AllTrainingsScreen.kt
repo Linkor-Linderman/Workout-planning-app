@@ -1,0 +1,161 @@
+package com.example.trainingplanapp.featureTrainingScreen.presentation.allTrainingsScreen
+
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.trainingplanapp.common.ExceptionAlertDialog
+import com.example.trainingplanapp.featureTrainingScreen.presentation.composable.AppointedTrainingListPage
+import com.example.trainingplanapp.featureTrainingScreen.presentation.composable.TrainingListPage
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun AllTrainingsScreen(
+    destinationNavController: DestinationsNavigator,
+    viewModel: AllTrainingsScreenViewModel = hiltViewModel(),
+    contentPaddingValues: PaddingValues
+) {
+    val state by viewModel.container.stateFlow.collectAsState()
+    LaunchedEffect(viewModel) {
+        viewModel.container.sideEffectFlow.collect {
+            when (it) {
+                is AllTrainingsSideEffects.Navigate -> {
+                    destinationNavController.navigate(it.destination)
+                }
+                is AllTrainingsSideEffects.NavigateWithResult -> TODO()
+                is AllTrainingsSideEffects.NavigateWithArguments -> {
+                    destinationNavController.navigate(it.destination)
+                }
+            }
+        }
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+    ) {
+        val pagerState = rememberPagerState(
+            pageCount = 3,
+            initialOffscreenLimit = 2,
+            infiniteLoop = true,
+            initialPage = 0,
+        )
+        val tabIndex = remember {
+            mutableStateOf(pagerState.currentPage)
+        }
+        val coroutineScope = rememberCoroutineScope()
+        val listOfTabsName = listOf("My trainings", "Appointed", "Liked")
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPaddingValues),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                modifier = Modifier.align(Alignment.Start),
+                text = "Trainings",
+                style = MaterialTheme.typography.h4,
+                color = MaterialTheme.colors.primary,
+                textAlign = TextAlign.Start,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            TabRow(
+                modifier = Modifier.fillMaxWidth(),
+                // Our selected tab is our current page
+                selectedTabIndex = pagerState.currentPage,
+                // Override the indicator, using the provided pagerTabIndicatorOffset modifier
+                indicator = { tabPositions ->
+                    TabRowDefaults.Indicator(
+                        Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage])
+                    )
+                },
+                backgroundColor = MaterialTheme.colors.background,
+                contentColor = MaterialTheme.colors.primary
+            ) {
+                // Add tabs for all of our pages
+                listOfTabsName.forEachIndexed { index, title ->
+                    Tab(
+                        text = {
+                            Text(
+                                text = title,
+                                textAlign = TextAlign.Center,
+                                style = MaterialTheme.typography.h6,
+                                color = MaterialTheme.colors.primary
+                            )
+
+                        },
+                        selected = pagerState.currentPage == index,
+                        onClick = {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(
+                                    page = index,
+                                    pageOffset = 0f,
+                                    animationSpec = tween(100),
+                                    skipPages = true
+                                )
+                            }
+                        },
+                    )
+                }
+            }
+            if (state.errorMessage.isNotBlank()) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    ExceptionAlertDialog(messageText = state.errorMessage) {
+                        viewModel.onEvent(AllTrainingsUiEvents.DismissAlertDialog)
+                    }
+                }
+            } else if (state.isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(64.dp),
+                        color = MaterialTheme.colors.primary
+                    )
+                }
+            } else {
+                HorizontalPager(
+                    state = pagerState,
+                ) { page ->
+                    when (page) {
+                        0 -> TrainingListPage(
+                            listOfTrainings = state.listOfMyTraining
+                        ) {
+                            viewModel.onEvent(AllTrainingsUiEvents.ClickToTraining(it))
+                        }
+                        1 -> AppointedTrainingListPage(listOfTrainings = state.listOfAppointedTraining) {
+                            viewModel.onEvent(AllTrainingsUiEvents.ClickToAppointed(it))
+                        }
+                        2 -> TrainingListPage(
+                            listOfTrainings = state.listOfLikedTraining
+                        ) {
+                            viewModel.onEvent(AllTrainingsUiEvents.ClickToTraining(it))
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

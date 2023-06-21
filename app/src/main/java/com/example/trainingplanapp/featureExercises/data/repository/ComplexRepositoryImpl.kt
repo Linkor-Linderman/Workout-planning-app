@@ -23,7 +23,10 @@ class ComplexRepositoryImpl(
                             it.exerciseValues.duration,
                             it.exerciseValues.repetitions,
                             it.exerciseValues.weight,
-                        )
+                        ),
+                        imageId = it.imageId,
+                        name = it.name,
+                        orderNumber = it.orderNumber
                     )
                 },
                 complexCreate.name,
@@ -54,7 +57,9 @@ class ComplexRepositoryImpl(
                             it.exerciseValues.duration,
                             it.exerciseValues.repetitions,
                             it.exerciseValues.weight,
-                        )
+                        ), imageId = it.imageId,
+                        name = it.name,
+                        orderNumber = it.orderNumber
                     )
                 },
                 complexCreate.name,

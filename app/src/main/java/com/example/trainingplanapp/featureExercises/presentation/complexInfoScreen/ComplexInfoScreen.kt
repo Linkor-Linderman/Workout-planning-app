@@ -2,7 +2,8 @@ package com.example.trainingplanapp.featureExercises.presentation.complexInfoScr
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -58,6 +59,7 @@ fun ComplexInfoScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
     ) {
         if (state.errorMessage.isNotBlank()) {
             Box(
@@ -193,18 +195,14 @@ fun ComplexInfoScreen(
                     overflow = TextOverflow.Ellipsis
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                LazyColumn(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    item {
-                        state.complex.exercisesInformation.forEach { exercise ->
-                            ExerciseInfoItem(exerciseInfo = exercise) {
-                                viewModel.onEvent(ComplexInfoUiEvents.OnExerciseClick(it))
-                            }
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
+
+                state.complex.exercisesInformation.forEach { exercise ->
+                    ExerciseInfoItem(exerciseInfo = exercise) {
+                        viewModel.onEvent(ComplexInfoUiEvents.OnExerciseClick(it))
                     }
                 }
+                Spacer(modifier = Modifier.height(8.dp))
+
             }
         }
     }

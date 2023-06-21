@@ -4,8 +4,17 @@ import com.example.trainingplanapp.featureExercises.domain.model.ExerciseBriefIn
 
 data class ExerciseBriefInformDto(
     val exerciseId: String,
-    val exerciseValues: DefaultValuesDto
+    val exerciseValues: DefaultValuesDto,
+    val imageId: String,
+    val name: String,
+    val orderNumber: Int
 ) {
     fun toExerciseBriefInform(): ExerciseBriefInform =
-        ExerciseBriefInform(exerciseId = exerciseId, exerciseValues.toDefaultValues())
+        ExerciseBriefInform(
+            exerciseId = exerciseId,
+            exerciseValues.toDefaultValues(),
+            imageId,
+            name,
+            orderNumber
+        )
 }
