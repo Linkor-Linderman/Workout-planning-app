@@ -7,6 +7,7 @@ import com.example.trainingplanapp.featureExercises.domain.model.Complex
 import com.example.trainingplanapp.featureExercises.domain.model.ExerciseInfo
 import com.example.trainingplanapp.featureExercises.domain.repository.ComplexRepository
 import com.example.trainingplanapp.featureExercises.domain.repository.ExerciseRepository
+import com.example.trainingplanapp.featureMainScreen.domain.repository.ProfileRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -17,6 +18,7 @@ import java.io.IOException
 class GetComplexByIdUseCase(
     private val repository: ComplexRepository,
     private val exerciseRepository: ExerciseRepository,
+    private val profileRepository: ProfileRepository,
     private val stringResourcesManager: StringResourcesManager
 ) {
     private val unexpectedErrorMessage =
@@ -37,6 +39,7 @@ class GetComplexByIdUseCase(
                         ExerciseInfo(
                             it.exerciseId,
                             exercise.imageId,
+                            profileRepository.downloadPhoto(it.imageId),
                             exercise.muscleGroups,
                             exercise.name
                         )

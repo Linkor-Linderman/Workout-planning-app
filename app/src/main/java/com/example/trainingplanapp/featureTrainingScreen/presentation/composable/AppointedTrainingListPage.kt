@@ -19,6 +19,7 @@ import com.example.trainingplanapp.featureTrainingScreen.domain.model.AppointedT
 fun AppointedTrainingListPage(
     listOfTrainings: List<AppointedTraining>,
     onTrainingInfoClick: (AppointedTraining) -> Unit,
+    onTrainCompleteClick: (AppointedTraining) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -55,10 +56,14 @@ fun AppointedTrainingListPage(
                 item {
                     listOfTrainings.forEach { complexInfo ->
                         AppointedTrainingInfoItem(
-                            complexInfo
-                        ) {
-                            onTrainingInfoClick(it)
-                        }
+                            complexInfo,
+                            onTrainCompleteClick = {
+                                onTrainCompleteClick(it)
+                            },
+                            onCardClick = {
+                                onTrainingInfoClick(it)
+                            }
+                        )
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }

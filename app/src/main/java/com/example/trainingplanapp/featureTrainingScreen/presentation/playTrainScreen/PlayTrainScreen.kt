@@ -36,10 +36,11 @@ fun PlayTrainScreen(
     destinationNavController: DestinationsNavigator,
     viewModel: PlayTrainScreenViewModel = hiltViewModel(),
     trainId: String,
+    isAppointed: Boolean
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
     LaunchedEffect(viewModel) {
-        viewModel.fetchTrainById(trainId)
+        viewModel.fetchTrainById(trainId, isAppointed)
         viewModel.container.sideEffectFlow.collect {
             when (it) {
                 is PlayTrainSideEffects.Navigate -> {
@@ -161,19 +162,19 @@ fun PlayTrainScreen(
                                 }
                             }
                         }
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
             FilledButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                 text = "Complete train",
                 onClick = {
                     viewModel.onEvent(PlayTrainInfoUiEvents.ClickToCompleteAll)
                 }
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }

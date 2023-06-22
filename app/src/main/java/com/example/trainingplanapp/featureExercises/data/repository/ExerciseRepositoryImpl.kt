@@ -10,9 +10,11 @@ import com.example.trainingplanapp.featureExercises.domain.model.Exercise
 import com.example.trainingplanapp.featureExercises.domain.model.ExerciseInfo
 import com.example.trainingplanapp.featureExercises.domain.model.GetExercise
 import com.example.trainingplanapp.featureExercises.domain.repository.ExerciseRepository
+import com.example.trainingplanapp.featureMainScreen.domain.repository.ProfileRepository
 
 class ExerciseRepositoryImpl(
-    private val api: ExerciseApi
+    private val api: ExerciseApi,
+    private val profileRepository: ProfileRepository
 ) : ExerciseRepository {
     override suspend fun createExercise(createExercise: CreateExercise) {
         api.createExercise(
@@ -50,7 +52,11 @@ class ExerciseRepositoryImpl(
                 published = getExercise.published,
                 liked = getExercise.liked
             )
-        ).data.map { it.toExerciseInfo() }
+        ).data.map {
+            it.toExerciseInfo().copy(
+                bitmap = profileRepository.downloadPhoto(it.imageId)
+            )
+        }
     }
 
 }

@@ -23,11 +23,15 @@ import java.util.*
 @Composable
 fun TrainingInfoItem(
     trainingInfo: TrainingInfo,
-    onCardClick: (TrainingInfo) -> Unit
+    onCardClick: (TrainingInfo) -> Unit,
+    onCompleteTrainClick: (TrainingInfo) -> Unit
 ) {
     Card(
         modifier = Modifier
-            .height(128.dp),
+            .height(128.dp)
+            .clickable {
+                onCardClick(trainingInfo)
+            },
         backgroundColor = MaterialTheme.colors.secondary,
         shape = RoundedCornerShape(8.dp),
         elevation = 4.dp
@@ -43,9 +47,9 @@ fun TrainingInfoItem(
             ) {
                 Text(
                     text = trainingInfo.name,
-                    style = MaterialTheme.typography.h4,
+                    style = MaterialTheme.typography.h5,
                     color = MaterialTheme.colors.primary,
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
             }
@@ -77,7 +81,7 @@ fun TrainingInfoItem(
                 Spacer(modifier = Modifier.height(16.dp))
                 Row(
                     modifier = Modifier.clickable {
-                        onCardClick(trainingInfo)
+                        onCompleteTrainClick(trainingInfo)
                     },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -104,7 +108,8 @@ fun TrainingInfoItem(
 @Composable
 fun AppointedTrainingInfoItem(
     trainingInfo: AppointedTraining,
-    onCardClick: (AppointedTraining) -> Unit
+    onCardClick: (AppointedTraining) -> Unit,
+    onTrainCompleteClick: (AppointedTraining) -> Unit
 ) {
     val dates: String = buildString {
         for (i in trainingInfo.dates.indices) {
@@ -117,7 +122,10 @@ fun AppointedTrainingInfoItem(
     }
     Card(
         modifier = Modifier
-            .height(128.dp),
+            .height(128.dp)
+            .clickable {
+                onCardClick(trainingInfo)
+            },
         backgroundColor = MaterialTheme.colors.secondary,
         shape = RoundedCornerShape(8.dp),
         elevation = 4.dp
@@ -128,14 +136,15 @@ fun AppointedTrainingInfoItem(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
+                    .padding(start = 8.dp)
                     .weight(1f),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = trainingInfo.name,
-                    style = MaterialTheme.typography.h4,
+                    style = MaterialTheme.typography.h5,
                     color = MaterialTheme.colors.primary,
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
             }
@@ -147,26 +156,27 @@ fun AppointedTrainingInfoItem(
                         top = 4.dp,
                         bottom = 4.dp,
                         end = 4.dp
-                    )
+                    ),
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Coach name: "+ trainingInfo.trainerName,
-                    style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight(700)),
+                    text = "Coach name: " + trainingInfo.trainerName,
+                    style = MaterialTheme.typography.body1,
                     color = MaterialTheme.colors.primary,
-                    maxLines = 1,
+                    maxLines = 4,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = "Dates: $dates",
-                    style = MaterialTheme.typography.h6,
+                    style = MaterialTheme.typography.body1,
                     color = MaterialTheme.colors.primary.copy(alpha = 0.8f),
-                    maxLines = 3,
+                    maxLines = 4,
                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(modifier = Modifier.width(1.dp))
+                Spacer(modifier = Modifier.width(16.dp))
                 Row(
                     modifier = Modifier.clickable {
-                        onCardClick(trainingInfo)
+                        onTrainCompleteClick(trainingInfo)
                     },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -190,9 +200,8 @@ fun AppointedTrainingInfoItem(
     }
 }
 
-fun convertDateString(inputDate: String): String {
-    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-    val outputFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-    val date: Date = inputFormat.parse(inputDate)
-    return outputFormat.format(date)
+fun convertDateString(timestamp: Long): String {
+    val date = Date(timestamp)
+    val format = SimpleDateFormat("dd.MM.yyyy")
+    return format.format(date)
 }

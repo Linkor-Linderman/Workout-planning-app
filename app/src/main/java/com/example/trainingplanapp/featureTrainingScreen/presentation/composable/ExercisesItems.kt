@@ -182,7 +182,7 @@ fun ComplexInTrainItemWithCompleteButton(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Complete exercise",
+                    text = "Complete complex",
                     style = MaterialTheme.typography.button,
                     color = MaterialTheme.colors.primary,
                     maxLines = 3,

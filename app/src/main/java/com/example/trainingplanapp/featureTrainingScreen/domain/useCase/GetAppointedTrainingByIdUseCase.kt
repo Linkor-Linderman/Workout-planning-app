@@ -34,11 +34,10 @@ class GetAppointedTrainingByIdUseCase(
                 val trainingWithExtendedComplexInfo = TrainingWithExtendedComplexInfo(
                     common = training.common,
                     complexes = training.complexes.map {
-                        val complex = complexRepository.getComplexById(it.complexId)
                         ComplexInTrainExtended(
                             it.complexId,
-                            name = complex.name,
-                            description = complex.description,
+                            name = "Complex: " + it.orderNumber,
+                            description = "Complex: " + it.orderNumber,
                             exerciseValues = it.exerciseValues,
                             orderNumber = it.orderNumber,
                         )

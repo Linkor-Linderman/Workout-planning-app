@@ -115,7 +115,7 @@ class AllExercisesScreenViewModel @Inject constructor(
                     muscleGroups = PartOfTheBody.values().toList().map { it.name },
                     my = false,
                     name = "",
-                    paginationQueryDto = PaginationQuery(1, 15),
+                    paginationQueryDto = PaginationQuery(1, 5),
                     shared = false,
                     liked = false,
                     published = false

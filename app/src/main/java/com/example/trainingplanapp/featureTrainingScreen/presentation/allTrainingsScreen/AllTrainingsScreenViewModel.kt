@@ -39,11 +39,23 @@ class AllTrainingsScreenViewModel @Inject constructor(
 
     fun onEvent(event: AllTrainingsUiEvents) {
         when (event) {
-            is AllTrainingsUiEvents.ClickToAppointed -> TODO()
+            is AllTrainingsUiEvents.ClickToAppointed -> intent {
+                postSideEffect(
+                    AllTrainingsSideEffects.NavigateWithArguments(
+                        TrainInfoScreenDestination(
+                            trainId = event.appointedTraining.id,
+                            true
+                        )
+                    )
+                )
+            }
             is AllTrainingsUiEvents.ClickToTraining -> intent {
                 postSideEffect(
                     AllTrainingsSideEffects.NavigateWithArguments(
-                        TrainInfoScreenDestination(trainId = event.trainingInfo.id)
+                        TrainInfoScreenDestination(
+                            trainId = event.trainingInfo.id,
+                            false
+                        )
                     )
                 )
             }
@@ -57,7 +69,20 @@ class AllTrainingsScreenViewModel @Inject constructor(
             is AllTrainingsUiEvents.ClickToTrainingPlay -> intent {
                 postSideEffect(
                     AllTrainingsSideEffects.NavigateWithArguments(
-                        PlayTrainScreenDestination(event.trainingInfo.id)
+                        PlayTrainScreenDestination(
+                            event.trainingInfo.id,
+                            false
+                        )
+                    )
+                )
+            }
+            is AllTrainingsUiEvents.ClickToAppointedTrainingPlay -> intent {
+                postSideEffect(
+                    AllTrainingsSideEffects.NavigateWithArguments(
+                        PlayTrainScreenDestination(
+                            event.trainingInfo.id,
+                            true
+                        )
                     )
                 )
             }

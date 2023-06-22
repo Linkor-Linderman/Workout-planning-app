@@ -36,10 +36,11 @@ fun TrainInfoScreen(
     destinationNavController: DestinationsNavigator,
     viewModel: TrainingInfoScreenViewModel = hiltViewModel(),
     trainId: String,
+    isAppointed: Boolean
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
     LaunchedEffect(viewModel) {
-        viewModel.fetchTrainById(trainId)
+        viewModel.fetchTrainById(trainId, isAppointed)
         viewModel.container.sideEffectFlow.collect {
             when (it) {
                 is TrainInfoSideEffects.Navigate -> {

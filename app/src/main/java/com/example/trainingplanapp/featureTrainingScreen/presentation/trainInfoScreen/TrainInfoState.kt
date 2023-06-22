@@ -7,5 +7,6 @@ data class TrainInfoState(
     val isLoading: Boolean = false,
     val errorMessage: String = "",
     val training: TrainingWithExtendedComplexInfo? = null,
+    val isAppointed: Boolean = false,
     val listOfTrainingListItem: List<TrainingListItem> = emptyList()
 )

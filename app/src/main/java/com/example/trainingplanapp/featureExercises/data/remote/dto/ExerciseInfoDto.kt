@@ -9,5 +9,5 @@ data class ExerciseInfoDto(
     val name: String
 ) {
     fun toExerciseInfo(): ExerciseInfo =
-        ExerciseInfo(id, imageId, muscleGroup, name)
+        ExerciseInfo(id, imageId, null, muscleGroup, name)
 }

@@ -1,5 +1,6 @@
 package com.example.trainingplanapp.featureTrainingScreen.presentation.playTrainScreen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.trainingplanapp.R
@@ -53,7 +54,7 @@ class PlayTrainScreenViewModel @Inject constructor(
                         when (it) {
                             is ComplexInTrainExtended -> it.complexId != event.complexInTrain.complexId
                             else -> {
-                                false
+                                true
                             }
                         }
                     })
@@ -78,7 +79,8 @@ class PlayTrainScreenViewModel @Inject constructor(
                     event.complexInTrain,
                     event.exerciseInTrain
                 )
-                if (newComplex == null) {
+                Log.d("SOME", newComplex.toString())
+                if (newComplex!!.exerciseValues.isEmpty()) {
                     reduce {
                         state.copy(listOfTrainingListItem = state.listOfTrainingListItem.filter {
                             when (it) {
@@ -113,11 +115,9 @@ class PlayTrainScreenViewModel @Inject constructor(
         exerciseInTrain: ExerciseInTrain
     ): ComplexInTrainExtended? {
         var result: ComplexInTrainExtended? = null
-        val listOfExercise = complexInTrainExtended.exerciseValues.filter {
-            it.exerciseId != exerciseInTrain.exerciseId && it.orderNumber != exerciseInTrain.orderNumber
+        val listOfExercise = complexInTrainExtended.exerciseValues.filterNot {
+            it.exerciseId == exerciseInTrain.exerciseId
         }
-        if (listOfExercise.isEmpty())
-            return null
         result = ComplexInTrainExtended(
             complexInTrainExtended.complexId,
             complexInTrainExtended.name,
@@ -129,37 +129,69 @@ class PlayTrainScreenViewModel @Inject constructor(
     }
 
     fun fetchTrainById(
-        trainId: String
+        trainId: String,
+        isAppointed: Boolean
     ) {
         intent {
-            useCases.getTrainingByIdUseCase(trainId).onEach { result ->
-                when (result) {
-                    is Resource.Error -> reduce {
-                        state.copy(
-                            isLoading = false,
-                            errorMessage = result.message ?: unexpectedErrorMessage
-                        )
-                    }
-                    is Resource.Loading -> reduce {
-                        state.copy(
-                            isLoading = true,
-                            errorMessage = ""
-                        )
-                    }
-                    is Resource.Success -> {
-                        reduce {
+            if (isAppointed) {
+                useCases.getAppointedTrainingByIdUseCase(trainId).onEach { result ->
+                    when (result) {
+                        is Resource.Error -> reduce {
                             state.copy(
-                                training = result.data!!,
-                                listOfTrainingListItem = useCases.getSortedByOrderTrainingItemInListUseCase(
-                                    result.data
-                                ),
                                 isLoading = false,
-                                errorMessage = "",
+                                errorMessage = result.message ?: unexpectedErrorMessage
                             )
                         }
+                        is Resource.Loading -> reduce {
+                            state.copy(
+                                isLoading = true,
+                                errorMessage = ""
+                            )
+                        }
+                        is Resource.Success -> {
+                            reduce {
+                                state.copy(
+                                    training = result.data!!,
+                                    listOfTrainingListItem = useCases.getSortedByOrderTrainingItemInListUseCase(
+                                        result.data
+                                    ),
+                                    isLoading = false,
+                                    errorMessage = "",
+                                )
+                            }
+                        }
                     }
-                }
-            }.launchIn(viewModelScope)
+                }.launchIn(viewModelScope)
+            } else {
+                useCases.getTrainingByIdUseCase(trainId).onEach { result ->
+                    when (result) {
+                        is Resource.Error -> reduce {
+                            state.copy(
+                                isLoading = false,
+                                errorMessage = result.message ?: unexpectedErrorMessage
+                            )
+                        }
+                        is Resource.Loading -> reduce {
+                            state.copy(
+                                isLoading = true,
+                                errorMessage = ""
+                            )
+                        }
+                        is Resource.Success -> {
+                            reduce {
+                                state.copy(
+                                    training = result.data!!,
+                                    listOfTrainingListItem = useCases.getSortedByOrderTrainingItemInListUseCase(
+                                        result.data
+                                    ),
+                                    isLoading = false,
+                                    errorMessage = "",
+                                )
+                            }
+                        }
+                    }
+                }.launchIn(viewModelScope)
+            }
         }
     }
 }

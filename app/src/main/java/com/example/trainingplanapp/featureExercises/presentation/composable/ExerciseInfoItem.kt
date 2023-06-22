@@ -1,5 +1,8 @@
 package com.example.trainingplanapp.featureExercises.presentation.composable
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
@@ -43,6 +47,9 @@ fun ExerciseInfoItem(
             }
         }
     }
+    // val emptyPlaceHolder = getBitmapFromDrawable(LocalContext.current, R.drawable.sitting_example)
+    // val imageBitmap = emptyPlaceHolder.asImageBitmap()
+
     Card(
         modifier = Modifier
             .height(148.dp)
@@ -56,19 +63,35 @@ fun ExerciseInfoItem(
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Image(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(
-                        top = 4.dp,
-                        bottom = 4.dp,
-                        start = 4.dp
-                    )
-                    .clip(RoundedCornerShape(4.dp)),
-                painter = painterResource(id = R.drawable.sitting_example),
-                contentDescription = "Train_cover",
-                contentScale = ContentScale.Crop
-            )
+            if (exerciseInfo.bitmap == null) {
+                Image(
+                    painter = painterResource(id = R.drawable.sitting_example),
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(
+                            top = 4.dp,
+                            bottom = 4.dp,
+                            start = 4.dp
+                        )
+                        .clip(RoundedCornerShape(4.dp)),
+                    contentDescription = "Train_cover",
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Image(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(
+                            top = 4.dp,
+                            bottom = 4.dp,
+                            start = 4.dp
+                        )
+                        .clip(RoundedCornerShape(4.dp)),
+                    bitmap = exerciseInfo.bitmap.asImageBitmap(),
+                    contentDescription = "Train_cover",
+                    contentScale = ContentScale.Crop
+                )
+            }
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -99,6 +122,7 @@ fun ExerciseInfoItem(
         }
     }
 }
+
 @Composable
 fun ExerciseItem(
     exerciseInfo: Exercise,
@@ -182,6 +206,7 @@ fun ExerciseItem(
         }
     }
 }
+
 @Composable
 fun BodyPartItem(
     name: String
@@ -201,4 +226,8 @@ fun BodyPartItem(
             color = MaterialTheme.colors.background
         )
     }
+}
+
+fun getBitmapFromDrawable(context: Context, drawableId: Int): Bitmap {
+    return BitmapFactory.decodeResource(context.resources, drawableId)
 }

@@ -49,7 +49,7 @@ fun AllExercisesScreen(
     ) {
         val pagerState = rememberPagerState(
             pageCount = 3,
-            initialOffscreenLimit = 2,
+            initialOffscreenLimit = 1,
             infiniteLoop = true,
             initialPage = 0,
         )

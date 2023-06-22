@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.trainingplanapp.R
 import com.example.trainingplanapp.common.ExceptionAlertDialog
-import com.example.trainingplanapp.featureMainScreen.presentation.common.TrainingItemCard
+import com.example.trainingplanapp.featureTrainingScreen.presentation.composable.AppointedTrainingInfoItem
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 @Composable
@@ -41,6 +41,9 @@ fun MainScreen(
                 }
                 MainScreenSideEffects.NavigateBack -> {
                     destinationNavController.popBackStack()
+                }
+                is MainScreenSideEffects.NavigateWithArguments -> {
+                    destinationNavController.navigate(it.destination)
                 }
             }
         }
@@ -145,10 +148,16 @@ fun MainScreen(
                     )
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                state.currentDayTrainings.forEach { _ ->
-                    TrainingItemCard() {
-                        viewModel.onEvent(MainScreenUiEvents.ClickToTraining(it))
-                    }
+                state.currentDayTrainings.forEach { train ->
+                    AppointedTrainingInfoItem(
+                        train,
+                        onCardClick = {
+                            viewModel.onEvent(MainScreenUiEvents.ClickToAppointed(it))
+                        },
+                        onTrainCompleteClick = {
+                            viewModel.onEvent(MainScreenUiEvents.ClickToAppointedTrainingPlay(it))
+                        }
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }

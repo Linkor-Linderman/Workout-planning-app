@@ -12,6 +12,7 @@ import com.example.trainingplanapp.featureExercises.domain.useCase.ExerciseUseCa
 import com.example.trainingplanapp.featureExercises.domain.useCase.GetExerciseByIdUseCase
 import com.example.trainingplanapp.featureExercises.domain.useCase.GetExerciseListUseCase
 import com.example.trainingplanapp.featureExercises.domain.useCase.complex.*
+import com.example.trainingplanapp.featureMainScreen.domain.repository.ProfileRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,8 +36,9 @@ object FeatureExerciseModule {
     @Singleton
     fun provideExerciseRepository(
         api: ExerciseApi,
+        repository: ProfileRepository
     ): ExerciseRepository {
-        return ExerciseRepositoryImpl(api)
+        return ExerciseRepositoryImpl(api, repository)
     }
 
     @Provides
@@ -73,10 +75,16 @@ object FeatureExerciseModule {
     fun provideComplexUseCases(
         repository: ComplexRepository,
         exerciseRepository: ExerciseRepository,
+        profileRepository: ProfileRepository,
         stringResourcesManager: StringResourcesManager
     ): ComplexUseCases {
         return ComplexUseCases(
-            getComplexByIdUseCase = GetComplexByIdUseCase(repository, exerciseRepository, stringResourcesManager),
+            getComplexByIdUseCase = GetComplexByIdUseCase(
+                repository,
+                exerciseRepository,
+                profileRepository,
+                stringResourcesManager
+            ),
             getComplexListUseCase = GetComplexListUseCase(repository, stringResourcesManager),
             createComplexUseCase = CreateComplexUseCase(repository, stringResourcesManager),
             editComplexUseCase = EditComplexUseCase(repository, stringResourcesManager)

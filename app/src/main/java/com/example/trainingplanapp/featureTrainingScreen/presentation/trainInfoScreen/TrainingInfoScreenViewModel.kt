@@ -45,7 +45,8 @@ class TrainingInfoScreenViewModel @Inject constructor(
                 postSideEffect(
                     TrainInfoSideEffects.NavigateWithArguments(
                         PlayTrainScreenDestination(
-                            state.training!!.id
+                            state.training!!.id,
+                            state.isAppointed
                         )
                     )
                 )
@@ -54,37 +55,71 @@ class TrainingInfoScreenViewModel @Inject constructor(
     }
 
     fun fetchTrainById(
-        trainId: String
+        trainId: String,
+        isAppointed: Boolean
     ) {
         intent {
-            useCases.getTrainingByIdUseCase(trainId).onEach { result ->
-                when (result) {
-                    is Resource.Error -> reduce {
-                        state.copy(
-                            isLoading = false,
-                            errorMessage = result.message ?: unexpectedErrorMessage
-                        )
-                    }
-                    is Resource.Loading -> reduce {
-                        state.copy(
-                            isLoading = true,
-                            errorMessage = ""
-                        )
-                    }
-                    is Resource.Success -> {
-                        reduce {
+            if (isAppointed) {
+                useCases.getAppointedTrainingByIdUseCase(trainId).onEach { result ->
+                    when (result) {
+                        is Resource.Error -> reduce {
                             state.copy(
-                                training = result.data!!,
-                                listOfTrainingListItem = useCases.getSortedByOrderTrainingItemInListUseCase(
-                                    result.data
-                                ),
                                 isLoading = false,
-                                errorMessage = "",
+                                errorMessage = result.message ?: unexpectedErrorMessage
                             )
                         }
+                        is Resource.Loading -> reduce {
+                            state.copy(
+                                isLoading = true,
+                                errorMessage = ""
+                            )
+                        }
+                        is Resource.Success -> {
+                            reduce {
+                                state.copy(
+                                    training = result.data!!,
+                                    isAppointed = true,
+                                    listOfTrainingListItem = useCases.getSortedByOrderTrainingItemInListUseCase(
+                                        result.data
+                                    ),
+                                    isLoading = false,
+                                    errorMessage = "",
+                                )
+                            }
+                        }
                     }
-                }
-            }.launchIn(viewModelScope)
+                }.launchIn(viewModelScope)
+            } else {
+                useCases.getTrainingByIdUseCase(trainId).onEach { result ->
+                    when (result) {
+                        is Resource.Error -> reduce {
+                            state.copy(
+                                isLoading = false,
+                                errorMessage = result.message ?: unexpectedErrorMessage
+                            )
+                        }
+                        is Resource.Loading -> reduce {
+                            state.copy(
+                                isLoading = true,
+                                errorMessage = ""
+                            )
+                        }
+                        is Resource.Success -> {
+                            reduce {
+                                state.copy(
+                                    training = result.data!!,
+                                    isAppointed = false,
+                                    listOfTrainingListItem = useCases.getSortedByOrderTrainingItemInListUseCase(
+                                        result.data
+                                    ),
+                                    isLoading = false,
+                                    errorMessage = "",
+                                )
+                            }
+                        }
+                    }
+                }.launchIn(viewModelScope)
+            }
         }
     }
 }

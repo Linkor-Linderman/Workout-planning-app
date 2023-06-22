@@ -141,19 +141,38 @@ fun AllTrainingsScreen(
                 ) { page ->
                     when (page) {
                         0 -> TrainingListPage(
-                            listOfTrainings = state.listOfMyTraining
-                        ) {
-                            viewModel.onEvent(AllTrainingsUiEvents.ClickToTraining(it))
-                        }
-                        1 -> AppointedTrainingListPage(listOfTrainings = state.listOfAppointedTraining) {
-                            viewModel.onEvent(AllTrainingsUiEvents.ClickToAppointed(it))
-                        }
+                            listOfTrainings = state.listOfMyTraining,
+                            onTrainingInfoClick = {
+                                viewModel.onEvent(AllTrainingsUiEvents.ClickToTraining(it))
+                            },
+                            onTrainCompleteClick = {
+                                viewModel.onEvent(AllTrainingsUiEvents.ClickToTrainingPlay(it))
+                            }
+                        )
+                        1 -> AppointedTrainingListPage(
+                            listOfTrainings = state.listOfAppointedTraining,
+                            onTrainingInfoClick = {
+                                viewModel.onEvent(AllTrainingsUiEvents.ClickToAppointed(it))
+                            },
+                            onTrainCompleteClick = {
+                                viewModel.onEvent(
+                                    AllTrainingsUiEvents.ClickToAppointedTrainingPlay(
+                                        it
+                                    )
+                                )
+                            }
+                        )
                         2 -> TrainingListPage(
-                            listOfTrainings = state.listOfLikedTraining
-                        ) {
-                            viewModel.onEvent(AllTrainingsUiEvents.ClickToTraining(it))
-                        }
+                            listOfTrainings = state.listOfLikedTraining,
+                            onTrainingInfoClick = {
+                                viewModel.onEvent(AllTrainingsUiEvents.ClickToTraining(it))
+                            },
+                            onTrainCompleteClick = {
+                                viewModel.onEvent(AllTrainingsUiEvents.ClickToTrainingPlay(it))
+                            }
+                        )
                     }
+
                 }
             }
         }

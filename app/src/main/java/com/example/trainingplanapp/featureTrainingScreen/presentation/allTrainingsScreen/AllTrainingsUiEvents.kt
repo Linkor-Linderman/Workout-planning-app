@@ -7,5 +7,7 @@ sealed class AllTrainingsUiEvents {
     object DismissAlertDialog : AllTrainingsUiEvents()
     data class ClickToTraining(val trainingInfo: TrainingInfo) : AllTrainingsUiEvents()
     data class ClickToTrainingPlay(val trainingInfo: TrainingInfo) : AllTrainingsUiEvents()
+    data class ClickToAppointedTrainingPlay(val trainingInfo: AppointedTraining) :
+        AllTrainingsUiEvents()
     data class ClickToAppointed(val appointedTraining: AppointedTraining) : AllTrainingsUiEvents()
 }

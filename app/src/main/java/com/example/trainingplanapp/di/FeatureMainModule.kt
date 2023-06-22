@@ -5,6 +5,7 @@ import com.example.trainingplanapp.featureMainScreen.data.remote.ProfileApi
 import com.example.trainingplanapp.featureMainScreen.data.repository.ProfileRepositoryImpl
 import com.example.trainingplanapp.featureMainScreen.domain.repository.ProfileRepository
 import com.example.trainingplanapp.featureMainScreen.domain.useCases.GetCurrentDateUseCase
+import com.example.trainingplanapp.featureMainScreen.domain.useCases.GetPhotoUseCase
 import com.example.trainingplanapp.featureMainScreen.domain.useCases.GetProfileUseCase
 import com.example.trainingplanapp.featureMainScreen.domain.useCases.ProfileUseCase
 import dagger.Module
@@ -41,7 +42,8 @@ object FeatureMainModule {
     ): ProfileUseCase {
         return ProfileUseCase(
             getProfileUseCase = GetProfileUseCase(repository, stringResourcesManager),
-            getCurrentDateUseCase = GetCurrentDateUseCase()
+            getCurrentDateUseCase = GetCurrentDateUseCase(),
+            getPhotoUseCase = GetPhotoUseCase(repository, stringResourcesManager)
         )
     }
 }
